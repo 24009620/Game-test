@@ -4,7 +4,7 @@ from ursina.prefabs.first_person_controller import FirstPersonController
 app = Ursina()
 
 
-map = Entity(model="Plains_Test_Optimised_COlor", scale=100, collider="mesh", texture = "grass" ,outline = True , y = 0)
+map = Entity(model="Plains_Test", scale=100, collider="mesh", texture = "grass" ,outline = True , y = 0)
 Sky()
 
 light = PointLight(parent=map, position=(110, 100, 0), color=color.white, intensity=0.1,)
