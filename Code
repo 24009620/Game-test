@@ -1,0 +1,20 @@
+from ursina import *
+from ursina.prefabs.first_person_controller import FirstPersonController
+
+app = Ursina()
+
+
+map = Entity(model="Plains_Test_Optimised_COlor", scale=100, collider="mesh", texture = "grass" ,outline = True , y = 0)
+map2= Entity(model="Cube", scale=5, collider="mesh", color=hsv(60,.100,.50),outline = True , y = 21.5)
+
+
+light = PointLight(parent=map, position=(110, 100, 0), color=color.white, intensity=0.1,)
+AmbientLight(color = color.rgba(100, 100, 100, 0.1))
+
+player = FirstPersonController(y=1000)
+player.speed = 5
+player.jump_height = 2
+player.gravity = 0.5
+
+
+app.run()
