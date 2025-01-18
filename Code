@@ -6,7 +6,7 @@ app = Ursina()
 
 map = Entity(model="Plains_Test_Optimised_COlor", scale=100, collider="mesh", texture = "grass" ,outline = True , y = 0)
 map2= Entity(model="Cube", scale=5, collider="mesh", color=hsv(60,.100,.50),outline = True , y = 21.5)
-
+Sky()
 
 light = PointLight(parent=map, position=(110, 100, 0), color=color.white, intensity=0.1,)
 AmbientLight(color = color.rgba(100, 100, 100, 0.1))
