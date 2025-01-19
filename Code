@@ -10,9 +10,11 @@ class Game:
     def main_menu(self):
         self.title = Text("24009620's game", position=(-0.2, 0.4), scale=2)
 
-        self.start_button = Button(text="Start Game", position=(0, 0), scale=(0.2), on_click=self.start_game)
+        self.start_button = Button(text="Start Game", position=(0, 0), scale=(0.2), color=color.rgba(100,100,100,0.1), on_click=self.start_game)
 
-        self.exit_button = Button(text="Exit", position=(0, -0.2), scale=(0.2), on_click=self.exit_game)
+        self.exit_button = Button(text="Exit", position=(0, -0.2), scale=(0.2), color=color.rgba(100,10,100,0.5), on_click=self.exit_game)
+
+        Sky()
 
     def start_game(self):
         self.title.disable()
