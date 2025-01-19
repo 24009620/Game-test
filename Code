@@ -4,21 +4,34 @@ from ursina.prefabs.first_person_controller import FirstPersonController
 class Game:
     def __init__(self):
         self.app = Ursina()
+        self.main_menu()
+        self.app.run()
+
+    def main_menu(self):
+        self.title = Text("24009620's game", position=(-0.2, 0.4), scale=2)
+
+        self.start_button = Button(text="Start Game", position=(0, 0), scale=(0.2), on_click=self.start_game)
+
+        self.exit_button = Button(text="Exit", position=(0, -0.2), scale=(0.2), on_click=self.exit_game)
+
+    def start_game(self):
+        self.title.disable()
+        self.start_button.disable()
+        self.exit_button.disable()
         self.setup_map()
         self.setup_lights()
         self.setup_player()
-        self.app.run()
 
+    def exit_game(self):
+        self.app.quit()
 
     def setup_map(self):
-        self.map = Entity(model="Plains_Test_Optimised_COlor", scale=100, collider="mesh", texture = "grass" ,outline = True , y = 0)
+        self.map = Entity(model="Plains_Test_Optimised_COlor", scale=100, collider="mesh", texture="grass", outline=True, y=0)
         Sky()
 
-
     def setup_lights(self):
-        light = PointLight(parent=self.map, position=(110, 100, 0), color=color.white, intensity=0.1,)
-        AmbientLight(color = color.rgba(100, 100, 100, 0.1))
-
+        light = PointLight(parent=self.map, position=(110, 100, 0), color=color.white, intensity=0.1)
+        AmbientLight(color=color.rgba(100, 100, 100, 0.1))
 
     def setup_player(self):
         self.player = FirstPersonController(y=1000)
