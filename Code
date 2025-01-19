@@ -24,23 +24,34 @@ class Game:
         self.setup_lights()
         self.setup_player()
 
+        # Create text to display when shift is pressed
+        self.shift_text = Text("", position=(0, -0.3), scale=2, color=color.red, background=True)
+
     def exit_game(self):
         self.app.quit()
 
     def setup_map(self):
-        self.map = Entity(model="Plains_Test_Optimised_COlor", scale=100, collider="mesh", texture="grass", outline=True, y=0)
-        Sky()
+        self.map = Entity(model="Plains_Test_Optimised_COlor", scale=100, collider="mesh", texture="grass", outline=True, y=-100)
 
     def setup_lights(self):
         light = PointLight(parent=self.map, position=(110, 100, 0), color=color.white, intensity=0.1)
-        AmbientLight(color=color.rgba(100, 100, 100, 0.1))
+        AmbientLight(color=color.rgba(100, 100, 100, 0.5))
 
     def setup_player(self):
-        self.player = FirstPersonController(y=1000)
-        self.player.speed = 5
+        self.player = FirstPersonController(y=1)
+        self.player.speed = 5  # Default speed
         self.player.jump_height = 2
         self.player.gravity = 0.5
 
+
+    #DOESNT WORK PLEASE HELP IM LOSING IT.
+    def update(self):
+        if held_keys["shift"]:
+            self.player.speed = 100
+            self.shift_text.text = "Shift is being held!"
+        else:
+            self.player.speed = 5
+            self.shift_text.text = "Press Shift to speed up"
 
 if __name__ == "__main__":
     game = Game()
