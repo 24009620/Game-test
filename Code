@@ -1,22 +1,26 @@
 from ursina import *
 from ursina.prefabs.first_person_controller import FirstPersonController
 from ursina.shaders import lit_with_shadows_shader
+import time
+import random
 
 Entity.default_shader = lit_with_shadows_shader
 
-class Game:
+class Game(Entity):
     def __init__(self):
+        super().__init__()
         self.app = Ursina()
-        self.player = none
+        self.player = None
+        self.gun = None  # Initialize gun attribute
         self.main_menu()
         self.app.run()
 
     def main_menu(self):
         self.title = Text("24009620's game", position=(-0.2, 0.4), scale=2)
 
-        self.start_button = Button(text="Start Game", position=(0, 0), scale=(0.2), color=color.rgba(100,100,100,0.1), on_click=self.start_game)
+        self.start_button = Button(text="Start Game", position=(0, 0), scale=(0.2), color=color.rgba(100, 100, 100, 0.1), on_click=self.start_game)
 
-        self.exit_button = Button(text="Exit", position=(0, -0.2), scale=(0.2), color=color.rgba(100,10,100,0.5), on_click=self.exit_game)
+        self.exit_button = Button(text="Exit", position=(0, -0.2), scale=(0.2), color=color.rgba(100, 10, 100, 0.5), on_click=self.exit_game)
 
         Sky()
 
@@ -27,16 +31,17 @@ class Game:
         self.setup_map()
         self.setup_lights()
         self.setup_player()
+        self.gun = self.Gun(parent=self.player)  # Instantiate the Gun class with the player as parent
 
         # Create text to display when shift is pressed
-        self.shift_text = Text("", position=(0, -0.3), scale=2, color=color.red, background=True)
+        self.shift_text = Text("", position=(0, -0.3), scale=1, color=color.red, background=True)
 
     def exit_game(self):
         self.app.quit()
 
     def setup_map(self):
         self.map = Entity(model="Dorchester3D.com_plains_test.obj", scale=100, collider="mesh", texture="grass", outline=True, y=-100)
-        self.map.rotation = (100,0,0)
+        self.map.rotation = (100, 0, 0)
 
     def setup_lights(self):
         light = PointLight(parent=self.map, position=(110, 100, 0), color=color.white, intensity=0.1)
@@ -49,14 +54,44 @@ class Game:
         self.player.gravity = 0.5
         self.player.collider = BoxCollider(self.player, Vec3(0, 1, 0), Vec3(1, 2, 1))
 
-    #DOESNT WORK PLEASE HELP IM LOSING IT.
+    class Gun(Entity):
+        def __init__(self, parent=None):
+            super().__init__(parent=parent)  # Set the parent to the player
+            self.model = 'Cube'  # Load the gun model
+            self.scale = 0.5  # Adjust the scale as needed
+            self.position = (0.5, 1, 1)  # Position it in front of the player
+            self.rotation = (0, 180, 0)  # Adjust rotation if necessary
+            self.shoot_sound = Audio('Square.wav', loop=False, autoplay=False)  # Load the sound
+            self.last_shot_time = 0  # Initialize last shot time
+
+        def shoot(self):
+            current_time = time.time()  # Get the current time
+            if current_time - self.last_shot_time >= 0.2:  # Check if 0.2 seconds have passed
+                self.shoot_sound.play()  # Play the shooting sound
+
+                # Create a bullet entity
+                bullet = Entity(model='Cube', color=color.red, scale=0.01, collider='box')
+                bullet.position = self.position + self.forward * 0.5  # Position the bullet in front of the gun
+                bullet.animate('position', bullet.position + self.forward * 10, duration=1,
+                               curve=curve.linear)  # Move the bullet forward
+                destroy(bullet, delay=1)  # Destroy the bullet after 1 second
+
+                self.last_shot_time = current_time  # Update the last shot time
+
     def update(self):
-        if held_keys["shift"]:
-            self.player.speed = 100
-            self.shift_text.text = "Shift is being held!"
-        else:
-            self.player.speed = 5
-            self.shift_text.text = "Press Shift to speed up"
+        if self.player:
+            if held_keys["shift"]:
+                self.player.speed = 10
+                camera.fov = 100
+                self.shift_text.text = "Shift is being held!"
+            else:
+                camera.fov = 90
+                self.player.speed = 5
+                self.shift_text.text = "Press Shift to speed up"
+
+            if held_keys['left mouse']:
+                if self.gun:  # Ensure the gun is instantiated
+                    self.gun.shoot()  # Call the shoot method of the gun
 
 if __name__ == "__main__":
     game = Game()
