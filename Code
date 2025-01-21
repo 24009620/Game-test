@@ -7,6 +7,7 @@ Entity.default_shader = lit_with_shadows_shader
 class Game:
     def __init__(self):
         self.app = Ursina()
+        self.player = none
         self.main_menu()
         self.app.run()
 
