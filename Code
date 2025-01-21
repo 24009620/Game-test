@@ -40,7 +40,7 @@ class Game(Entity):
         self.app.quit()
 
     def setup_map(self):
-        self.map = Entity(model="Dorchester3D.com_plains_test.obj", scale=100, collider="mesh", texture="grass", outline=True, y=-100)
+        self.map = Entity(model="Plains_Test.obj", scale=100, collider="mesh", texture="grass", outline=True, y=-100)
         self.map.rotation = (100, 0, 0)
 
     def setup_lights(self):
