@@ -1,5 +1,8 @@
 from ursina import *
 from ursina.prefabs.first_person_controller import FirstPersonController
+from ursina.shaders import lit_with_shadows_shader
+
+Entity.default_shader = lit_with_shadows_shader
 
 class Game:
     def __init__(self):
@@ -31,7 +34,8 @@ class Game:
         self.app.quit()
 
     def setup_map(self):
-        self.map = Entity(model="Plains_Test", scale=100, collider="mesh", texture="grass", outline=True, y=-100)
+        self.map = Entity(model="Dorchester3D.com_plains_test.obj", scale=100, collider="mesh", texture="grass", outline=True, y=-100)
+        self.map.rotation = (100,0,0)
 
     def setup_lights(self):
         light = PointLight(parent=self.map, position=(110, 100, 0), color=color.white, intensity=0.1)
@@ -42,7 +46,7 @@ class Game:
         self.player.speed = 5  # Default speed
         self.player.jump_height = 2
         self.player.gravity = 0.5
-
+        self.player.collider = BoxCollider(self.player, Vec3(0, 1, 0), Vec3(1, 2, 1))
 
     #DOESNT WORK PLEASE HELP IM LOSING IT.
     def update(self):
